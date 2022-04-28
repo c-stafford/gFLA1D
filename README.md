@@ -2,6 +2,8 @@
 
 MATLAB scripts for 1D injection of droplets into still hot air with uniform temperature. Droplets are injected with a constant velocity and temperature.
 
+Produces the results in Figure 6 (section 4.2.1) of the corresponding preprint: https://arxiv.org/abs/2204.13071
+
 ## Case Files
 
 These should be run in the following order:
