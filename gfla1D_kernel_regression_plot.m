@@ -31,9 +31,6 @@ figleft = screensize(3)/2 - plotsizex/2;
 figbottom = screensize(4)/2 - plotsizey/2;
 set(0,'DefaultAxesXLimMode','auto')
 set(0,'DefaultAxesYLimMode','auto')
-hintspace = 0.00;
-vintspace = 0.00;
-cbarspace = 0.13;
 
 figure('position',[figleft figbottom plotsizex plotsizey],'visible','on');
 clf
