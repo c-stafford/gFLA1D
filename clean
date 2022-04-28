@@ -1,0 +1,4 @@
+rm *.mat
+rm *.png
+rm -r gfla1D_animation
+rm -r gfla1D_animation_xr
