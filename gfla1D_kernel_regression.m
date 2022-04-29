@@ -47,8 +47,8 @@ tol = 3;
 
 % Set smoothing lengths as grid spacing for each phase-space variable
 % Should be:
-%   > 1/tol*delta to ensure contributions at distributed over at least 2 grid points
-%   > 0.5/tol*delta to ensure contributions do not vanish
+%   > 1/tol*dx to ensure contributions at distributed over at least 2 grid points
+%   > 0.5/tol*dx to ensure contributions do not vanish
 hx = 1.0*dx;
 hr = 1.0*dr;
 
