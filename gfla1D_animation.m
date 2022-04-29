@@ -30,7 +30,7 @@ rd(rd == 0) = NaN;
 % Replace zero number density values with NaN
 nd(nd == 0) = NaN;
 
-% Define arbitrary y-values for plotting
+% Specify zero y-values for plotting
 yd = zeros(NR,1);
 
 % Figure sizing
@@ -39,9 +39,6 @@ plotsizey = 360;
 screensize = get(0,'ScreenSize');
 figleft = screensize(3)/2 - plotsizex/2;
 figbottom = screensize(4)/2 - plotsizey/2;
-set(0,'DefaultAxesXLimMode','auto')
-set(0,'DefaultAxesYLimMode','auto')
-labelsize = 18;
 
 % ----------------------------------------------------------
 
@@ -49,19 +46,18 @@ labelsize = 18;
 figure('outerposition',[figleft figbottom plotsizex plotsizey])
 clf
 scpt = scatter(xd(1,:),yd,scalr*rd(1,:).^2,nd(1,:),'filled');
-title(['$t = \;$',num2str((1-1)*dt,'%.2f')],'Fontsize',12,'Interpreter','latex');
-xlabel('$x$','Fontsize',labelsize,'Interpreter','latex');
+title(['$t = \;$',num2str((1-1)*dt,'%.2f')]);
+xlabel('$x$');
 axis equal
 axis([min(reshape(xd,[],1)) max(reshape(xd,[],1)) min(yd)-eps max(yd)+eps])
 colormap turbo
-c1 = colorbar('Fontsize',18,'Location','SouthOutside');
+c1 = colorbar('Fontsize',labelsize,'Location','SouthOutside');
 c1.Label.FontSize = labelsize;
 c1.Label.Interpreter = 'latex';
-c1.TickLabelInterpreter = 'latex';
 c1.Label.String = '$n_d$';
 caxis([10^-4 1])
 set(gca,'ColorScale','log')
-set(gca,'Fontsize',labelsize);
+set(gca,'Layer','bottom')
 
 % Loop through timesteps
 for ns = 1:nf:NS+1
@@ -69,7 +65,7 @@ for ns = 1:nf:NS+1
     set(scpt,'XData',xd(ns,:));
     set(scpt,'SizeData',scalr*rd(ns,:).^2);
     set(scpt,'CData',nd(ns,:));
-    title(['$t = \;$',num2str((ns-1)*dt,'%.2f')],'Fontsize',20,'Interpreter','latex');
+    title(['$t = \;$',num2str((ns-1)*dt,'%.2f')]);
     
     drawnow
     pause(0.05)

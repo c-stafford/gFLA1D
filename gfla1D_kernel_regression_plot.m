@@ -29,28 +29,22 @@ plotsizey = 540;
 screensize = get(0,'ScreenSize');
 figleft = screensize(3)/2 - plotsizex/2;
 figbottom = screensize(4)/2 - plotsizey/2;
-set(0,'DefaultAxesXLimMode','auto')
-set(0,'DefaultAxesYLimMode','auto')
 
-figure('position',[figleft figbottom plotsizex plotsizey],'visible','on');
+figure('position',[figleft figbottom plotsizex plotsizey]);
 clf
 fig = pcolor(Xgrid,Rgrid,p_grid);
 set(fig,'EdgeColor','none')
-box on
-title('Probability density $p (x,r)$')
+title('Probability density $p(x,r)$')
 xlabel('$x$')
 ylabel('$r / r_{d0}^*$')
 axis equal
 axis([min(reshape(Xgrid,[],1)) max(reshape(Xgrid,[],1)) min(reshape(Rgrid,[],1)) max(reshape(Rgrid,[],1))])
 colormap([[1,1,1];turbo])
-c1 = colorbar('Fontsize',18,'Location','EastOutside');
-c1.Label.FontSize = 18;
-c1.Label.Interpreter = 'latex';
-c1.TickLabelInterpreter = 'latex';
+c1 = colorbar('Fontsize',labelsize,'Location','EastOutside');
+c1.Label.FontSize = labelsize;
 c1.Label.String = '$p$';
-c1.Ruler.MinorTick = 'on';
+c1.Label.Interpreter = 'latex';
 caxis([10^-4 1])
 set(gca,'ColorScale','log')
-set(gca,'Layer','top')
 
 hgexport(gcf,[mfilename,'.',imgtype],hgexport('factorystyle'),'Format',imgtype);

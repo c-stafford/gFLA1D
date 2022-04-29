@@ -94,6 +94,7 @@ for nr = 1:NR
             ud(ns+1,nr) = ud(ns,nr) - dt*1/rdsq(ns,nr)*ud(ns,nr);
             Jxx(ns+1,nr) = Jxx(ns,nr) + dt*Oxx(ns,nr);
             Jxr(ns+1,nr) = Jxr(ns,nr) + dt*Oxr(ns,nr);
+            Jrx(ns+1,nr) = Jrx(ns,nr);
             Jrr(ns+1,nr) = Jrr(ns,nr) + dt*delta/(2*rdsq(ns,nr))*Jrr(ns,nr);
             Oxx(ns+1,nr) = Oxx(ns,nr) + dt*(-1/(rdsq(ns,nr))*Oxx(ns,nr) + 2/(rdsq(ns,nr)^(3/2))*ud(ns,nr)*Jrx(ns,nr));
             Oxr(ns+1,nr) = Oxr(ns,nr) + dt*(-1/(rdsq(ns,nr))*Oxr(ns,nr) + 2/(rdsq(ns,nr)^(3/2))*ud(ns,nr)*Jrr(ns,nr));
