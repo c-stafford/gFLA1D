@@ -53,18 +53,19 @@ c1.Label.FontSize = labelsize;
 c1.Label.Interpreter = 'latex';
 c1.TickLabelInterpreter = 'latex';
 c1.Label.String = '$n_d$';
-%caxis([nd(end,end) max(reshape(nd,[],1))])
-%caxis([10^-4 max(reshape(nd,[],1))])
 caxis([10^-4 1])
 set(gca,'ColorScale','log')
 set(gca,'Fontsize',labelsize);
 
 % Loop through timesteps
-for ns = 2:nf:NS+1
+for ns = 2:nf:NS
     
-    set(scpt,'XData',xd(ns,:));
-    set(scpt,'YData',rd(ns,:));
-    set(scpt,'CData',nd(ns,:));
+    % Trajectories which have not evaporated
+    nrvals = find(NSEVAP > ns);
+    
+    set(scpt,'XData',xd(ns,nrvals));
+    set(scpt,'YData',rd(ns,nrvals));
+    set(scpt,'CData',nd(ns,nrvals));
     title(['$t = \;$',num2str((ns-1)*dt,'%.2f')],'Fontsize',20,'Interpreter','latex');
     
     drawnow

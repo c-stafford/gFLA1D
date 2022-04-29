@@ -30,12 +30,12 @@ xd = zeros(NS+1,NR);        % Position
 ud = zeros(NS+1,NR);        % Velocity
 rdsq = zeros(NS+1,NR);      % Square of radius
 nd = zeros(NS+1,NR);        % Probability density in (x,r) space
-J11 = zeros(NS+1,NR);       % Jacobian components
-J12 = zeros(NS+1,NR);
-J21 = zeros(NS+1,NR);
-J22 = zeros(NS+1,NR);
-O11 = zeros(NS+1,NR);       % Jacobian derivative components
-O12 = zeros(NS+1,NR);
+Jxx = zeros(NS+1,NR);       % Jacobian components
+Jxr = zeros(NS+1,NR);
+Jrx = zeros(NS+1,NR);
+Jrr = zeros(NS+1,NR);
+Oxx = zeros(NS+1,NR);       % Jacobian derivative components
+Oxr = zeros(NS+1,NR);
 detJ = zeros(NS+1,NR);      % Jacobian determinant
 foldcount = zeros(NS+1,NR); % Count of number of fold layers
 NSEVAP = zeros(NR,1);       % Number of timesteps needed for initial radius rd0 to evaporate
@@ -43,12 +43,12 @@ NSEVAP = zeros(NR,1);       % Number of timesteps needed for initial radius rd0 
 % Initial conditions
 xd0 = 0;
 ud0 = 1;
-J110 = 1;
-J120 = 0;
-J210 = 0;
-J220 = 1;
-O110 = 0;
-O120 = 0;
+Jxx0 = 1;
+Jxr0 = 0;
+Jrx0 = 0;
+Jrr0 = 1;
+Oxx0 = 0;
+Orr0 = 0;
 
 % ----------------------------------------------------------
 
@@ -62,15 +62,15 @@ for nr = 1:NR
     nd(1,nr) = 1/rd0(nr)*1/(S*sqrt(2*pi))*exp(-(log(rd0(nr)) - M)^2/(2*S^2));
     xd(1,nr) = xd0;
     ud(1,nr) = ud0;
-    J11(1,nr) = J110;
-    J12(1,nr) = J120;
-    J21(1,nr) = J210;
-    J22(1,nr) = J220;
-    O11(1,nr) = O110;
-    O12(1,nr) = O120;
+    Jxx(1,nr) = Jxx0;
+    Jxr(1,nr) = Jxr0;
+    Jrx(1,nr) = Jrx0;
+    Jrr(1,nr) = Jrr0;
+    Oxx(1,nr) = Oxx0;
+    Oxr(1,nr) = Orr0;
 
     % Compute Jacobian determinant
-    detJ(1,nr) = J11(1,nr)*J22(1,nr) - J12(1,nr)*J21(1,nr);
+    detJ(1,nr) = Jxx(1,nr)*Jrr(1,nr) - Jxr(1,nr)*Jrx(1,nr);
     
     % Initialise time-stepping
     ns = 1;
@@ -92,14 +92,14 @@ for nr = 1:NR
             % Forward Euler method for remaining variables
             xd(ns+1,nr) = xd(ns,nr) + dt*ud(ns,nr);
             ud(ns+1,nr) = ud(ns,nr) - dt*1/rdsq(ns,nr)*ud(ns,nr);
-            J11(ns+1,nr) = J11(ns,nr) + dt*O11(ns,nr);
-            J12(ns+1,nr) = J12(ns,nr) + dt*O12(ns,nr);
-            J22(ns+1,nr) = J22(ns,nr) + dt*delta/(2*rdsq(ns,nr))*J22(ns,nr);
-            O11(ns+1,nr) = O11(ns,nr) + dt*(-1/(rdsq(ns,nr))*O11(ns,nr) + 2/(rdsq(ns,nr)^(3/2))*ud(ns,nr)*J21(ns,nr));
-            O12(ns+1,nr) = O12(ns,nr) + dt*(-1/(rdsq(ns,nr))*O12(ns,nr) + 2/(rdsq(ns,nr)^(3/2))*ud(ns,nr)*J22(ns,nr));
+            Jxx(ns+1,nr) = Jxx(ns,nr) + dt*Oxx(ns,nr);
+            Jxr(ns+1,nr) = Jxr(ns,nr) + dt*Oxr(ns,nr);
+            Jrr(ns+1,nr) = Jrr(ns,nr) + dt*delta/(2*rdsq(ns,nr))*Jrr(ns,nr);
+            Oxx(ns+1,nr) = Oxx(ns,nr) + dt*(-1/(rdsq(ns,nr))*Oxx(ns,nr) + 2/(rdsq(ns,nr)^(3/2))*ud(ns,nr)*Jrx(ns,nr));
+            Oxr(ns+1,nr) = Oxr(ns,nr) + dt*(-1/(rdsq(ns,nr))*Oxr(ns,nr) + 2/(rdsq(ns,nr)^(3/2))*ud(ns,nr)*Jrr(ns,nr));
 
             % Compute Jacobian determinant
-            detJ(ns+1,nr) = J11(ns+1,nr)*J22(ns+1,nr) - J12(ns+1,nr)*J21(ns+1,nr);
+            detJ(ns+1,nr) = Jxx(ns+1,nr)*Jrr(ns+1,nr) - Jxr(ns+1,nr)*Jrx(ns+1,nr);
 
             % Compute number density
             nd(ns+1,nr) = nd(1,nr)/(abs(detJ(ns+1,nr)));
@@ -130,9 +130,7 @@ rd = sqrt(rdsq);
 
 % Display maximum number of trajectory crossings
 % *** Should be zero for gFLA ***
-%disp(' ')
 fprintf('Maximum number of trajectory crossings: %2i\n',max(max(foldcount)));
-%disp(' ')
 
 % Save data to file
 save(mfilename)
